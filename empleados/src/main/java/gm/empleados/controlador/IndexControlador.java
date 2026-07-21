@@ -34,7 +34,7 @@ public class IndexControlador {
 
     @RequestMapping(value = "/agregar", method = RequestMethod.GET)
     public String mostrarAgregar(){
-        return "agregar";
+        return "empleado/agregar";
     }
 
     @RequestMapping(value = "/agregar", method = RequestMethod.POST)
@@ -49,7 +49,7 @@ public class IndexControlador {
         Empleado empleado = empleadoServicio.buscarEmpleadoPorId(idEmpleado);
         logger.info("Empleado a editar: " + empleado);
         modelo.put("empleado", empleado);
-        return "editar";
+        return "empleado/editar";
     }
 
     @RequestMapping(value = "/editar", method = RequestMethod.POST)

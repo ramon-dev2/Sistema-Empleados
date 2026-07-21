@@ -1,11 +1,20 @@
 <!--Agregar los urk de la aplicacion -->
 <c:set var="urlInicio">
-    <c:url value="${application.contextPath}/"/>
+    <c:url value="/"/>
 </c:set>
 
 <c:set var="urlAgregar">
-    <c:url value="${application.contextPath}/agregar"/>
+    <c:url value="/agregar"/>
 </c:set>
+
+<c:set var="urlAgregarDept">
+    <c:url value="/agregarDept"/>
+</c:set>
+
+<c:set var="urlEditar">
+    <c:url value="/editar"/>
+</c:set>
+
 
 <div class="container">
     <nav class="navbar navbar-expand-lg  bg-primary" data-bs-theme="dark">
@@ -24,7 +33,10 @@
                            aria-current="page" href="${urlInicio}">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${urlAgregar}">Agregar Empleados</a>
+                        <a class="nav-link" href="${urlAgregar}">Empleados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${urlAgregar}">Departamento</a>
                     </li>
                 </ul>
             </div>

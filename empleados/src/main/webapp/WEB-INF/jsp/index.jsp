@@ -30,7 +30,7 @@
                     </td>
                     <td class="text-center">
                         <c:set var="urlEditar">
-                            <c:url value="${application.contextPath}/editar">
+                            <c:url value="/editar">
                                 <c:param name="idEmpleado" value="${empleado.idEmpleado}"/>
                             </c:url>
                         </c:set>
@@ -38,7 +38,7 @@
                             Editar
                         </a>
                         <c:set var="urlEliminar">
-                            <c:url value="${application.contextPath}/eliminar">
+                            <c:url value="/eliminar">
                                 <c:param name="idEmpleado" value="${empleado.idEmpleado}"/>
                             </c:url>
                         </c:set>
