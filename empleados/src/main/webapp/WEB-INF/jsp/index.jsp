@@ -2,20 +2,23 @@
 
 <%@ include file="comunes/navegacion.jsp"%>
 
+<c:url var="urlAgregarEmpleado" value="/agregar"/>
 
 <div class="container">
-    <div class="text-center" style="margin: 30px">
-        <h3>Sistema de Empleados</h3>
+    <div class="d-flex justify-content-between align-items-center" style="margin: 30px 0">
+        <h3>Listado De Empleados</h3>
+        <a href="${urlAgregarEmpleado}" class="btn btn-primary">Agregar empleado</a>
     </div>
-    <div class="container">
-        <table class="table table-striped table-hover table-bordered align-middle">
+
+    <table class="table table-striped table-hover table-bordered align-middle">
             <thead class="table-dark text-center">
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Nombre</th>
                 <th scope="col">Departamento</th>
                 <th scope="col">Sueldo</th>
-                <th scope="col"></th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -23,10 +26,27 @@
                 <tr>
                     <th scope="row">${empleado.idEmpleado}</th>
                     <td>${empleado.nombreEmpleado}</td>
-                    <td>${empleado.departamento}</td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${not empty empleado.departamento}">
+                                ${empleado.departamento.nombreDepartamento}
+                            </c:when>
+                            <c:otherwise>Sin asignar</c:otherwise>
+                        </c:choose>
+                    </td>
                     <td>
                         <fmt:setLocale value="en_DOP"/>
                         <fmt:formatNumber type="currency" value="${empleado.sueldo}"/>
+                    </td>
+                    <td class="text-center">
+                        <c:choose>
+                            <c:when test="${empleado.activo}">
+                                <span class="badge text-bg-success">Activo</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="badge text-bg-secondary">Inactivo</span>
+                            </c:otherwise>
+                        </c:choose>
                     </td>
                     <td class="text-center">
                         <c:set var="urlEditar">
@@ -48,8 +68,13 @@
                     </td>
                 </tr>
             </c:forEach>
+            <c:if test="${empty empleados}">
+                <tr>
+                    <td colspan="6" class="text-center">No hay empleados registrados.</td>
+                </tr>
+            </c:if>
             </tbody>
         </table>
-    </div>
 </div>
+
 <%@ include file="comunes/pie-pagina.jsp"%>

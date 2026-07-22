@@ -7,8 +7,12 @@
     <c:url value="/agregar"/>
 </c:set>
 
-<c:set var="urlAgregarDept">
-    <c:url value="/agregarDept"/>
+<c:set var="urlEmpleados">
+    <c:url value="/empleados"/>
+</c:set>
+
+<c:set var="urlDepartamentos">
+    <c:url value="/departamentos"/>
 </c:set>
 
 <c:set var="urlEditar">
@@ -17,7 +21,7 @@
 
 
 <div class="container">
-    <nav class="navbar navbar-expand-lg  bg-primary" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg  bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="${urlInicio}">Sistema de Empleados</a>
             <button class="navbar-toggler" type="button"
@@ -33,10 +37,10 @@
                            aria-current="page" href="${urlInicio}">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${urlAgregar}">Empleados</a>
+                        <a class="nav-link" href="${urlEmpleados}">Empleados</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${urlAgregar}">Departamento</a>
+                        <a class="nav-link" href="${urlDepartamentos}">Departamentos</a>
                     </li>
                 </ul>
             </div>

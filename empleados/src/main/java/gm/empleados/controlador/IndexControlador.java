@@ -1,12 +1,12 @@
 package gm.empleados.controlador;
 
 import gm.empleados.modelo.Empleado;
+import gm.empleados.modelo.Departamento;
+import gm.empleados.servicio.DepartamentoServicio;
 import gm.empleados.servicio.EmpleadoServicio;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,11 +20,22 @@ import java.util.List;
 public class IndexControlador {
     private static final Logger logger = LoggerFactory.getLogger(IndexControlador.class);
 
-    @Autowired
-    EmpleadoServicio empleadoServicio;
+    private final EmpleadoServicio empleadoServicio;
+    private final DepartamentoServicio departamentoServicio;
+
+    public IndexControlador(EmpleadoServicio empleadoServicio,
+                            DepartamentoServicio departamentoServicio) {
+        this.empleadoServicio = empleadoServicio;
+        this.departamentoServicio = departamentoServicio;
+    }
 
     @RequestMapping(value="/", method = RequestMethod.GET)
-    public String iniciar(ModelMap modelo){
+    public String iniciar(){
+        return "inicio";
+    }
+
+    @RequestMapping(value="/empleados", method = RequestMethod.GET)
+    public String listarEmpleados(ModelMap modelo){
         List<Empleado> empleados = empleadoServicio.listarEmpleados();
         empleados.forEach(empleado -> logger.info(empleado.toString()));
         //Compartir el modelo con la vista
@@ -33,15 +44,22 @@ public class IndexControlador {
     }
 
     @RequestMapping(value = "/agregar", method = RequestMethod.GET)
-    public String mostrarAgregar(){
+    public String mostrarAgregar(ModelMap modelo){
+        modelo.put("departamentos", departamentoServicio.listarDepartamentos());
         return "empleado/agregar";
     }
 
     @RequestMapping(value = "/agregar", method = RequestMethod.POST)
-    public String agregar(@ModelAttribute("empleadoForma") Empleado empleado){
+    public String agregar(@ModelAttribute("empleadoForma") Empleado empleado,
+                          @RequestParam Integer idDepartamento){
+        Departamento departamento = departamentoServicio.buscarDepartamentoPorId(idDepartamento);
+        if (departamento == null) {
+            return "redirect:/agregar";
+        }
+        empleado.setDepartamento(departamento);
         logger.info("Empleado a agregar" + empleado);
         empleadoServicio.guardarEmpleado(empleado);
-        return "redirect:/";
+        return "redirect:/empleados";
     }
 
     @RequestMapping(value = "/editar", method = RequestMethod.GET)
@@ -49,14 +67,21 @@ public class IndexControlador {
         Empleado empleado = empleadoServicio.buscarEmpleadoPorId(idEmpleado);
         logger.info("Empleado a editar: " + empleado);
         modelo.put("empleado", empleado);
+        modelo.put("departamentos", departamentoServicio.listarDepartamentos());
         return "empleado/editar";
     }
 
     @RequestMapping(value = "/editar", method = RequestMethod.POST)
-    public String editar(@ModelAttribute("empleadoForma") Empleado empleado){
+    public String editar(@ModelAttribute("empleadoForma") Empleado empleado,
+                         @RequestParam Integer idDepartamento){
+        Departamento departamento = departamentoServicio.buscarDepartamentoPorId(idDepartamento);
+        if (departamento == null) {
+            return "redirect:/editar?idEmpleado=" + empleado.getIdEmpleado();
+        }
+        empleado.setDepartamento(departamento);
         logger.info("Empleado a guardar (editar): "+ empleado);
         empleadoServicio.guardarEmpleado(empleado);
-        return "redirect:/";
+        return "redirect:/empleados";
     }
 
     @RequestMapping(value = "/eliminar", method = RequestMethod.GET)
@@ -64,6 +89,6 @@ public class IndexControlador {
         Empleado empleado = new Empleado();
         empleado.setIdEmpleado(idEmpleado);
         empleadoServicio.eliminarEmpleado(empleado);
-        return "redirect:/";
+        return "redirect:/empleados";
     }
 }
